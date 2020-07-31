@@ -17,7 +17,7 @@ function InputLabel({name, children}) {
 	)
 }
 
-function InputField({name, type, placeholder}) {
+function InputField({name, type, placeholder, ...props}) {
 	return (
 		<ChakraInput
 			type={type}
@@ -25,6 +25,7 @@ function InputField({name, type, placeholder}) {
 			id={name}
 			placeholder={placeholder}
 			focusBorderColor="green.400"
+			{...props}
 		/>
 	)
 }
