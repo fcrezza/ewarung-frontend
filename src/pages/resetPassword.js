@@ -1,11 +1,28 @@
 import React from 'react'
 import {Box, Heading, Text, Stack} from '@chakra-ui/core'
+import {useForm} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers'
+import {object, string} from 'yup'
 
 import {Input} from 'components/Input'
 import Button from 'components/Button'
 import Head from 'components/Head'
 
-function resetPassword() {
+const validationSchema = object().shape({
+	email: string()
+		.email('Masukan email yang valid')
+		.required('Email tidak boleh kosong'),
+})
+
+function ResetPassword() {
+	const {register, handleSubmit, errors} = useForm({
+		resolver: yupResolver(validationSchema),
+	})
+
+	const onSubmit = (email) => {
+		console.log({email})
+	}
+
 	return (
 		<>
 			<Head title="Reset password" />
@@ -28,15 +45,25 @@ function resetPassword() {
 					Masukan email akun anda, kami akan mengirim link konfirmasi untuk
 					mereset password anda
 				</Text>
-				<Stack spacing="4">
-					<Input type="email" name="email" placeholder="Email" autoFocus />
-					<div>
-						<Button>Kirim</Button>
-					</div>
+				<Stack
+					as="form"
+					onSubmit={handleSubmit(onSubmit)}
+					spacing="4"
+					shouldWrapChildren
+				>
+					<Input
+						register={register}
+						error={errors?.email}
+						type="email"
+						name="email"
+						placeholder="Email"
+						autoFocus
+					/>
+					<Button type="submit">Kirim</Button>
 				</Stack>
 			</Box>
 		</>
 	)
 }
 
-export default resetPassword
+export default ResetPassword

@@ -1,11 +1,19 @@
 import React from 'react'
 import {Box, Flex, Heading, Stack, Text, Divider} from '@chakra-ui/core'
+import {useForm} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers'
+import {object, string} from 'yup'
 
 import {Input, PasswordInput} from 'components/Input'
 import Button from 'components/Button'
 import Link from 'components/Link'
 import Head from 'components/Head'
 import heroImage from 'images/hero.jpg'
+
+const validationSchema = object().shape({
+	username: string().required('Username tidak boleh kosong'),
+	password: string().required('Password tidak boleh kosong'),
+})
 
 function login() {
 	return (
@@ -53,30 +61,60 @@ function RightSection() {
 			<Box textAlign="right">
 				<Link to="/signup">Daftar</Link>
 			</Box>
-			<Box
-				mt="16"
-				maxWidth="450px"
-				mx="auto"
-				rounded="lg"
-				p="8"
-				border="1px"
-				borderColor="gray.300"
-			>
-				<Heading color="green.400" size="lg" mb="6" textTransform="uppercase">
-					Masuk
-				</Heading>
-				<Stack as="form" spacing="5" shouldWrapChildren>
-					<Input placeholder="Username" name="username" autoFocus />
-					<PasswordInput />
-					<Button block>Masuk</Button>
-				</Stack>
-				<Flex mt="8">
-					<Text color="gray.600">
-						Lupa password ? <Link to="/resetPassword">Reset password</Link>
-					</Text>
-				</Flex>
-			</Box>
+			<LoginForm />
 			<Footer />
+		</Box>
+	)
+}
+
+function LoginForm() {
+	const {register, handleSubmit, errors} = useForm({
+		resolver: yupResolver(validationSchema),
+	})
+	console.log('errros', errors)
+	const onSubmit = (formData) => {
+		console.log('formData: ', formData)
+	}
+
+	return (
+		<Box
+			mt="16"
+			maxWidth="450px"
+			mx="auto"
+			rounded="lg"
+			p="8"
+			border="1px"
+			borderColor="gray.300"
+		>
+			<Heading color="green.400" size="lg" mb="6" textTransform="uppercase">
+				Masuk
+			</Heading>
+			<Stack
+				as="form"
+				onSubmit={handleSubmit(onSubmit)}
+				spacing="5"
+				shouldWrapChildren
+			>
+				<Input
+					placeholder="Username"
+					name="username"
+					ref={register({required: true})}
+					error={errors?.username}
+					autoFocus
+				/>
+				<PasswordInput
+					ref={register({required: true})}
+					error={errors?.password}
+				/>
+				<Button type="submit" block>
+					Masuk
+				</Button>
+			</Stack>
+			<Flex mt="8">
+				<Text color="gray.600">
+					Lupa password ? <Link to="/resetPassword">Reset password</Link>
+				</Text>
+			</Flex>
 		</Box>
 	)
 }
