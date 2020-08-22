@@ -1,0 +1,22 @@
+.table {
+	width: 100%;
+}
+
+.heading {
+	background-color: #303a52;
+}
+
+.head {
+	color: #fff;
+	font-weight: 500;
+	font-size: 1.1rem;
+	text-align: left;
+}
+
+.body {
+	color: #333;
+}
+
+.row:nth-child(even) {
+	background: #f0f0f0;
+}

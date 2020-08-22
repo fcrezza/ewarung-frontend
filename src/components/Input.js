@@ -60,7 +60,7 @@ const Input = React.forwardRef((props, ref) => {
 
 const PasswordInput = React.forwardRef((props, ref) => {
 	const [show, setShow] = React.useState(false)
-	const {error, ...otherProps} = props
+	const {error, name, placeholder, ...otherProps} = props
 
 	return (
 		<FormControl>
@@ -70,9 +70,9 @@ const PasswordInput = React.forwardRef((props, ref) => {
 			<InputGroup>
 				<InputField
 					ref={ref}
-					name="password"
+					name={name}
 					type={show ? 'text' : 'password'}
-					placeholder="Masukan Password Kamu"
+					placeholder={placeholder}
 					isInvalid={!!error}
 					{...otherProps}
 				/>
