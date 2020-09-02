@@ -2,13 +2,13 @@ import React from 'react'
 import {Link as RouterLink, useLocation} from 'react-router-dom'
 import {Box, Text, Flex} from '@chakra-ui/core'
 import {
-	RiStore3Line,
 	RiShoppingBag3Line,
 	RiUser5Line,
 	RiStickyNoteLine,
 	RiArchiveDrawerLine,
 	RiSettings4Line,
 } from 'react-icons/ri'
+import {IoMdStats} from 'react-icons/io'
 
 function Link({to, icon, children}) {
 	const location = useLocation()
@@ -38,7 +38,7 @@ function Link({to, icon, children}) {
 
 function Overview() {
 	return (
-		<Link to="/dashboard/overview" icon={RiStore3Line}>
+		<Link to="/dashboard/overview" icon={IoMdStats}>
 			Ikhtisar
 		</Link>
 	)

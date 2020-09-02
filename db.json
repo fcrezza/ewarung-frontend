@@ -1,0 +1,142 @@
+{
+  "user": {
+    "code": 200,
+    "status": "success",
+    "userData": {
+      "user": {
+        "id": 2,
+        "username": "user",
+        "email": "mrdummy897@gmail.com",
+        "isVerified": 1
+      },
+      "store": {
+        "id": 1,
+        "name": "warung saya",
+        "idUser": 2
+      }
+    }
+  },
+  "inventories": [
+    {
+      "id": 1,
+      "name": "Shampo",
+      "price": 3000,
+      "stock": 20,
+      "idStore": 1,
+      "idSupplier": 1
+    },
+    {
+      "id": 2,
+      "name": "Amplas",
+      "price": 500,
+      "stock": 50,
+      "idStore": 1,
+      "idSupplier": 2
+    },
+    {
+      "id": 3,
+      "name": "Pepsodent",
+      "price": 4000,
+      "stock": 10,
+      "idStore": 1,
+      "idSupplier": 1
+    },
+    {
+      "id": 4,
+      "name": "Komo",
+      "price": 1000,
+      "stock": 100,
+      "idStore": 1,
+      "idSupplier": 2
+    },
+    {
+      "idStore": 1,
+      "name": "Shampo",
+      "price": 23424789,
+      "stock": 98792791,
+      "idSupplier": 2,
+      "id": 5
+    },
+    {
+      "idStore": 1,
+      "name": "garnier",
+      "price": 14000,
+      "stock": 5,
+      "id": 6
+    },
+    {
+      "idStore": 1,
+      "name": "Shampo",
+      "price": 90,
+      "stock": 90,
+      "idSupplier": 1,
+      "id": 7
+    },
+    {
+      "idStore": 1,
+      "name": "Shampo",
+      "price": 90,
+      "stock": 90,
+      "idSupplier": 1,
+      "id": 8
+    },
+    {
+      "idStore": 1,
+      "name": "Nivea",
+      "price": 24000,
+      "stock": 90,
+      "idSupplier": 2,
+      "id": 9
+    },
+    {
+      "idStore": 1,
+      "name": "Susu",
+      "price": 500000,
+      "stock": 10,
+      "idSupplier": 1,
+      "id": 10
+    },
+    {
+      "idStore": 1,
+      "name": "Donat",
+      "price": 5000,
+      "stock": 9000,
+      "idSupplier": 2,
+      "id": 11
+    },
+    {
+      "idStore": 1,
+      "name": "Nutella",
+      "price": 9000,
+      "stock": 90000,
+      "idSupplier": 1,
+      "id": 12
+    }
+  ],
+  "stores": [
+    {
+      "id": 1,
+      "name": "usmanStore",
+      "idUser": 2
+    },
+    {
+      "id": 2,
+      "name": "usmanStore",
+      "idUser": 3
+    }
+  ],
+  "suppliers": [
+    {
+      "id": 1,
+      "name": "usman",
+      "address": "kuripan",
+      "phoneNumber": 621111111
+    },
+    {
+      "id": 2,
+      "name": "panjol",
+      "address": "medono",
+      "phoneNumber": 62222
+    }
+  ]
+}

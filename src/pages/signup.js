@@ -37,7 +37,7 @@ function Signup() {
 		} catch (err) {
 			if (err.response) {
 				const {message} = err.response.data
-				setError(message.type, {message: message.message})
+				setError(message.name, {message: message.message})
 			}
 		}
 	}

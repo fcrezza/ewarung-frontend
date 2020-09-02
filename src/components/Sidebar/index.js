@@ -1,6 +1,7 @@
 import React from 'react'
-import {Flex} from '@chakra-ui/core'
+import {Flex, Box} from '@chakra-ui/core'
 
+import Logo from '../Logo'
 import {
 	Overview,
 	Transaction,
@@ -14,12 +15,15 @@ function Sidebar() {
 	return (
 		<Flex
 			flexDirection="column"
-			width="250px"
+			width="260px"
 			position="fixed"
 			backgroundColor="green.400"
 			height="100%"
 			zIndex={999}
 		>
+			<Box paddingTop="6" marginBottom="2" paddingX="6">
+				<Logo />
+			</Box>
 			<Overview />
 			<Transaction />
 			<Histories />

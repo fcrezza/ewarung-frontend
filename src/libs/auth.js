@@ -1,7 +1,8 @@
 import React from 'react'
 import useSWR from 'swr'
 
-import axios from 'libs/axios'
+import axios from 'axios' // for development only
+// import axios from 'libs/axios' // for real case
 
 const authContext = React.createContext()
 
@@ -12,12 +13,26 @@ function AuthProvider({children}) {
 }
 
 function useProvideAuth() {
+	// for real case
+	// let {data: user, mutate} = useSWR(
+	// 	'/user',
+	// 	async (url) => {
+	// 		const {data} = await axios.get(url, {
+	// 			withCredentials: true,
+	// 		})
+
+	// 		return data.userData
+	// 	},
+	// 	{
+	// 		revalidateOnFocus: false,
+	// 	}
+	// )
+
+	// for real case
 	let {data: user, mutate} = useSWR(
-		'/user',
+		'http://localhost:5000/user',
 		async (url) => {
-			const {data} = await axios.get(url, {
-				withCredentials: true,
-			})
+			const {data} = await axios.get(url)
 
 			return data.userData
 		},

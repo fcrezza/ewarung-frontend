@@ -1,26 +1,20 @@
 import React from 'react'
+import {AiFillEyeInvisible, AiFillEye} from 'react-icons/ai'
 import {
+	NumberInput as ChakraNumberInput,
+	NumberInputField,
+	NumberInputStepper,
+	NumberIncrementStepper,
+	NumberDecrementStepper,
 	FormControl,
-	FormErrorMessage,
-	FormLabel,
 	Input as ChakraInput,
 	InputRightElement,
 	InputGroup,
-	Button,
+	Button
 } from '@chakra-ui/core'
-import {AiFillEyeInvisible, AiFillEye} from 'react-icons/ai'
 
-function InputLabel({name, children}) {
-	return (
-		<FormLabel color="gray.700" htmlFor={name}>
-			{children}
-		</FormLabel>
-	)
-}
-
-function ErrorMessage({isInvalid, children}) {
-	return <FormErrorMessage isInvalid={isInvalid}>{children}</FormErrorMessage>
-}
+import Label from './Label'
+import ErrorMessage from './ErrorMessage'
 
 const InputField = React.forwardRef((props, ref) => {
 	const {name, type, placeholder, isInvalid, ...otherProps} = props
@@ -45,7 +39,7 @@ const Input = React.forwardRef((props, ref) => {
 
 	return (
 		<FormControl>
-			<InputLabel name={name}>{placeholder}</InputLabel>
+			<Label name={name}>{placeholder}</Label>
 			<InputField
 				name={name}
 				ref={ref}
@@ -58,15 +52,41 @@ const Input = React.forwardRef((props, ref) => {
 	)
 })
 
+const InputV2 = ({name, inputLabel, isRequired, error, ...props}) => {
+	return (
+		<FormControl isRequired={isRequired} isInvalid={Boolean(error)}>
+			<Label name={name}>{inputLabel}</Label>
+			<InputField name={name} isInvalid={Boolean(error)} {...props} />
+			<ErrorMessage isInvalid={Boolean(error)}>{error?.message}</ErrorMessage>
+		</FormControl>
+	)
+}
+
+const NumberInput = ({id, inputLabel, isRequired, error, ...props}) => {
+	return (
+		<FormControl isRequired={isRequired} isInvalid={Boolean(error)}>
+			<Label name={id}>{inputLabel}</Label>
+			<ChakraNumberInput min={0} isInvalid={Boolean(error)} {...props}>
+				<NumberInputField id={id} type="number" />
+				<NumberInputStepper>
+					<NumberIncrementStepper />
+					<NumberDecrementStepper />
+				</NumberInputStepper>
+			</ChakraNumberInput>
+			<ErrorMessage isInvalid={Boolean(error)}>{error?.message}</ErrorMessage>
+		</FormControl>
+	)
+}
+
 const PasswordInput = React.forwardRef((props, ref) => {
 	const [show, setShow] = React.useState(false)
 	const {error, name, placeholder, ...otherProps} = props
 
 	return (
 		<FormControl>
-			<InputLabel color="gray.700" name="password">
+			<Label color="gray.700" name="password">
 				Password
-			</InputLabel>
+			</Label>
 			<InputGroup>
 				<InputField
 					ref={ref}
@@ -94,4 +114,4 @@ const PasswordInput = React.forwardRef((props, ref) => {
 	)
 })
 
-export {Input, PasswordInput}
+export {Input, PasswordInput, InputV2, NumberInput}
