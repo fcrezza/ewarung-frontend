@@ -1,7 +1,7 @@
 import React from 'react'
 import {Box, Stack, Button} from '@chakra-ui/core'
 
-import Modal from 'components/Modal'
+import Modal from 'shared/Modal'
 
 function DeletePopup({onClose, isOpen, deleteFn, items}) {
   const onDelete = () => {

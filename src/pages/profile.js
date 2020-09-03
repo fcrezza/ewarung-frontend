@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Dashboard from 'components/Dashboard'
+import Dashboard from 'shared/Dashboard'
 
 function Profile() {
-	return <Dashboard>hello from profile</Dashboard>
+  return <Dashboard>hello from profile</Dashboard>
 }
 
 export default Profile

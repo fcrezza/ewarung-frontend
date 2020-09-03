@@ -2,7 +2,7 @@ import React from 'react'
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa'
 import {Box, Flex, Link, PseudoBox, Text, Stack} from '@chakra-ui/core'
 
-import Checkbox from 'components/Checkbox'
+import Checkbox from 'shared/Checkbox'
 
 function Container({children}) {
   return (
