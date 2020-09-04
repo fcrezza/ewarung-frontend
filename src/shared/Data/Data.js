@@ -2,8 +2,6 @@ import React from 'react'
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa'
 import {Box, Flex, Link, PseudoBox, Text, Stack} from '@chakra-ui/core'
 
-import Checkbox from 'shared/Checkbox'
-
 function Container({children}) {
   return (
     <Box
@@ -39,17 +37,17 @@ function ViewContainer({children}) {
   return <Box>{children}</Box>
 }
 
-function ViewHead({children, onClick, name, sort}) {
+function ViewHead({children, onClick, name, sortBy}) {
   return (
     <PseudoBox
       as="button"
       onClick={onClick}
-      width="25%"
+      flex="1"
       padding="2"
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      backgroundColor={name === sort?.name ? 'blue.900' : null}
+      backgroundColor={name === sortBy.name ? 'blue.900' : null}
       _hover={{
         backgroundColor: 'blue.900'
       }}
@@ -60,7 +58,7 @@ function ViewHead({children, onClick, name, sort}) {
       <Text as="h3" fontWeight="700" color="white">
         {children}
       </Text>
-      {sort?.name === name && sort?.order === 'desc' ? (
+      {sortBy.name === name && sortBy.order === 'desc' ? (
         <FaCaretUp color="#fff" />
       ) : (
         <FaCaretDown color="#fff" />
@@ -87,22 +85,16 @@ function ViewGroup({children, backgroundColor, ...props}) {
 
 function LeftElement({children}) {
   return (
-    <Box
+    <Flex
+      alignSelf="stretch"
+      alignItems="center"
+      justifyContent="center"
       borderRight="2px dashed white"
-      padding="2"
+      paddingX="2"
       width="40px"
-      marginRight="1rem"
     >
       {children}
-    </Box>
-  )
-}
-
-function CheckOption({onChange, isChecked}) {
-  return (
-    <Box borderRight="2px dashed white" marginRight="1rem">
-      <Checkbox onChange={onChange} isChecked={isChecked} />
-    </Box>
+    </Flex>
   )
 }
 
@@ -114,6 +106,5 @@ export {
   ViewHead,
   LeftElement,
   ViewContent,
-  ViewGroup,
-  CheckOption
+  ViewGroup
 }

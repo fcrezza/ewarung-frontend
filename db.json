@@ -130,13 +130,22 @@
       "id": 1,
       "name": "usman",
       "address": "kuripan",
-      "phoneNumber": 621111111
+      "phoneNumber": 621111111,
+      "idStore": 1
     },
     {
       "id": 2,
       "name": "panjol",
       "address": "medono",
-      "phoneNumber": 62222
+      "phoneNumber": 62222,
+      "idStore": 1
+    },
+    {
+      "idStore": 1,
+      "name": "Anang Fachreza",
+      "address": "Desa Karanganyar RT 01 RW 02, Kecamatan Sukoharjo",
+      "phoneNumber": "088261249633",
+      "id": 3
     }
   ]
 }

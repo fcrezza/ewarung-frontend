@@ -1,5 +1,5 @@
 import React from 'react'
-import {Flex, Box, Skeleton, Text, Stack} from '@chakra-ui/core'
+import {Flex, Box, Text, Stack} from '@chakra-ui/core'
 import useSWR from 'swr'
 
 import AddForm from 'components/Inventory/AddForm'
@@ -10,26 +10,27 @@ import Data from 'shared/Data'
 import Dashboard from 'shared/Dashboard'
 import Button from 'shared/Button'
 import Pagination from 'shared/Pagination'
+import Checkbox from 'shared/Checkbox'
+import Skeleton from 'shared/Skeleton'
 import Search from 'shared/Search'
 import {useAuth} from 'libs/auth'
 import useSearch from 'libs/useSearch'
+import useSort from 'libs/useSort'
+import useDisclosure from 'libs/useDisclosure'
 import axios from 'libs/axios'
 
 function Inventory() {
   const [typedValue, searchValue, setSearchValue] = useSearch(500)
-  const [modal, setModalVisibility] = React.useState({
-    isOpen: false,
-    type: ''
-  })
+  const {sortBy, sortItemBy} = useSort()
+  const {isOpen, onClose, onOpen} = useDisclosure()
   const [selectedItem, setSelectedItem] = React.useState([])
-  const [sort, sortItemBy] = React.useState(null)
   const limit = 10 // need to change page limit
   const [pageCount, setPageCount] = React.useState(1)
   const {user} = useAuth()
   const {
     data
   } = useSWR(
-    `http://localhost:5000/inventories?idStore=${user.store.id}&_page=${pageCount}&_limit=${limit}&_sort=${sort?.name}&_order=${sort?.order}&q=${searchValue}`,
+    `http://localhost:5000/inventories?idStore=${user.store.id}&_page=${pageCount}&_limit=${limit}&_sort=${sortBy.name}&_order=${sortBy.order}&q=${searchValue}`,
     (key) => axios.get(key).then((res) => res.data)
   )
   const {
@@ -61,64 +62,31 @@ function Inventory() {
     setSearchValue(event.target.value)
   }
 
-  const onClose = () => {
-    setModalVisibility((state) => ({
-      ...state,
-      isOpen: false
-    }))
-  }
-
-  const onOpen = (type) => {
-    setModalVisibility((state) => ({
-      type,
-      isOpen: true
-    }))
-  }
-
-  const sortItem = (name) => {
-    if (sort?.name === name && sort?.order === 'asc') {
-      sortItemBy((state) => ({
-        ...state,
-        order: 'desc'
-      }))
-      return
-    }
-
-    sortItemBy({
-      name: name,
-      order: 'asc'
-    })
-  }
-
   React.useEffect(() => {
     setPageCount(1)
-  }, [searchValue, sort])
-
-  React.useEffect(() => {
-    setSelectedItem([])
-  }, [pageCount])
+  }, [searchValue, sortBy])
 
   return (
     <Dashboard title="Data Barang">
       <Head title="Data Barang" />
       <AddForm
-        isOpen={modal.isOpen && modal.type === 'add'}
+        isOpen={isOpen.state && isOpen.type === 'add'}
         onClose={onClose}
       />
       <EditForm
         item={selectedItem[0]}
-        isOpen={modal.isOpen && modal.type === 'edit'}
+        isOpen={isOpen.state && isOpen.type === 'edit'}
         onClose={onClose}
       />
       <DeletePopup
-        isOpen={modal.isOpen && modal.type === 'delete'}
+        isOpen={isOpen.state && isOpen.type === 'delete'}
         items={selectedItem}
         onClose={onClose}
       />
       <Box marginBottom="6">
         <Button onClick={onOpen.bind(null, 'add')}>Tambah barang</Button>
       </Box>
-      <Flex alignContent="flex-start">
+      <Flex>
         <Data.Container>
           <Flex
             justifyContent="space-between"
@@ -152,47 +120,46 @@ function Inventory() {
           </Flex>
           <Data.ViewContainer>
             <Data.ViewGroup backgroundColor="blue.800">
-              <Data.CheckOption
-                onChange={handleSelectItem.bind(null, data)}
-                isChecked={
-                  selectedItem.length === data?.length && Boolean(data?.length)
-                }
-              />
+              <Data.LeftElement>
+                <Checkbox
+                  onChange={handleSelectItem.bind(null, data)}
+                  isChecked={
+                    selectedItem.length === data?.length &&
+                    Boolean(data?.length)
+                  }
+                />
+              </Data.LeftElement>
               <Data.ViewHead
                 name="name"
-                sort={sort}
-                onClick={sortItem.bind(null, 'name')}
+                sortBy={sortBy}
+                onClick={sortItemBy.bind(null, 'name')}
               >
                 Nama
               </Data.ViewHead>
               <Data.ViewHead
                 name="price"
-                sort={sort}
-                onClick={sortItem.bind(null, 'price')}
+                sortBy={sortBy}
+                onClick={sortItemBy.bind(null, 'price')}
               >
                 Harga
               </Data.ViewHead>
               <Data.ViewHead
                 name="stock"
-                sort={sort}
-                onClick={sortItem.bind(null, 'stock')}
+                sortBy={sortBy}
+                onClick={sortItemBy.bind(null, 'stock')}
               >
                 Stok
               </Data.ViewHead>
               <Data.ViewHead
                 name="idSupplier"
-                sort={sort}
-                onClick={sortItem.bind(null, 'idSupplier')}
+                sortBy={sortBy}
+                onClick={sortItemBy.bind(null, 'idSupplier')}
               >
                 Supplier
               </Data.ViewHead>
             </Data.ViewGroup>
             {!data ? (
-              <>
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-              </>
+              <Skeleton count={3} height="30px" my="5px" />
             ) : (
               data.map((d, i) => {
                 const isChecked = !!selectedItem.find((i) => i.id === d.id)
@@ -207,10 +174,12 @@ function Inventory() {
                     key={`${d.name}-${d.id}`}
                     backgroundColor={backgroundColor}
                   >
-                    <Data.CheckOption
-                      onChange={handleSelectItem.bind(null, d)}
-                      isChecked={isChecked}
-                    />
+                    <Data.LeftElement>
+                      <Checkbox
+                        onChange={handleSelectItem.bind(null, d)}
+                        isChecked={isChecked}
+                      />
+                    </Data.LeftElement>
                     <Data.ViewContent>{d.name}</Data.ViewContent>
                     <Data.ViewContent>{d.price}</Data.ViewContent>
                     <Data.ViewContent>{d.stock}</Data.ViewContent>
@@ -244,13 +213,7 @@ function Inventory() {
               <Data.ViewContent>Stock</Data.ViewContent>
             </Data.ViewGroup>
             {!mostStock ? (
-              <>
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-              </>
+              <Skeleton count={5} height="30px" my="5px" />
             ) : (
               mostStock.map((d, i) => {
                 const backgroundColor = i % 2 === 1 ? 'gray.200' : 'gray.50'
@@ -284,13 +247,7 @@ function Inventory() {
               <Data.ViewContent>Stock</Data.ViewContent>
             </Data.ViewGroup>
             {!lessStock ? (
-              <>
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-                <Skeleton height="30px" my="5px" />
-              </>
+              <Skeleton count={5} height="30px" my="5px" />
             ) : (
               lessStock.map((d, i) => {
                 const backgroundColor = i % 2 === 1 ? 'gray.200' : 'gray.50'
