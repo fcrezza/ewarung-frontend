@@ -1,27 +1,33 @@
 import React from 'react'
 import {Box, Stack, Button} from '@chakra-ui/core'
 
-import Modal from 'shared/Modal'
+import {Modal, ModalBody, ModalFooter} from 'shared/Modal'
 
-function DeletePopup({onClose, isOpen, deleteFn, items}) {
-  const onDelete = () => {
-    /*
-      batch delete logic here
-    */
+function DeletePopup({onClose, isOpen, handleDelete, itemLength}) {
+  const [isLoading, setLoading] = React.useState(false)
+
+  const onDelete = async () => {
+    setLoading(true)
+    await handleDelete()
+    setLoading(false)
     onClose()
   }
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} title="Yakin menghapus data?">
-      <Box>{items.length} data akan dihapus</Box>
-      <Stack marginTop="6" marginBottom="4" spacing="4" isInline>
-        <Button variantColor="gray" onClick={onClose}>
-          Batal
-        </Button>
-        <Button variantColor="red" onClick={onDelete}>
-          Hapus
-        </Button>
-      </Stack>
+      <ModalBody>
+        <Box>{itemLength} data akan dihapus</Box>
+      </ModalBody>
+      <ModalFooter>
+        <Stack marginTop="6" marginBottom="4" spacing="4" isInline>
+          <Button variantColor="gray" isDisabled={isLoading} onClick={onClose}>
+            Batal
+          </Button>
+          <Button variantColor="red" isDisabled={isLoading} onClick={onDelete}>
+            Hapus
+          </Button>
+        </Stack>
+      </ModalFooter>
     </Modal>
   )
 }

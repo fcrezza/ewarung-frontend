@@ -18,7 +18,7 @@ function Sidebar() {
       width="260px"
       position="fixed"
       backgroundColor="green.400"
-      height="100%"
+      height="100vh"
       zIndex={999}
     >
       <Box paddingTop="6" marginBottom="2" paddingX="6">

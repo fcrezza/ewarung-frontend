@@ -1,5 +1,4 @@
-import AddForm from './AddForm'
-import EditForm from './EditForm'
-import DeletePopup from './DeletePopup'
+import MainData from './MainData'
+import {RarelySupply, OftenSupply} from './Supply'
 
-export {AddForm, EditForm, DeletePopup}
+export {MainData, RarelySupply, OftenSupply}

@@ -1,17 +1,20 @@
 import React from 'react'
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa'
-import {Box, Flex, Link, PseudoBox, Text, Stack} from '@chakra-ui/core'
+import {
+  Box,
+  Flex,
+  IconButton,
+  PseudoBox,
+  Text,
+  Tooltip,
+  Stack
+} from '@chakra-ui/core'
+
+import OverlayScrollbar from 'shared/OverlayScrollbar'
 
 function Container({children}) {
   return (
-    <Box
-      maxWidth="750px"
-      flex="2"
-      backgroundColor="white"
-      padding="6"
-      rounded="md"
-      boxShadow="md"
-    >
+    <Box backgroundColor="white" padding="6" rounded="md" boxShadow="md">
       {children}
     </Box>
   )
@@ -25,11 +28,26 @@ function ButtonGroup({children}) {
   )
 }
 
-function Button({color, onClick, children}) {
+function ActionWrapper({children}) {
   return (
-    <Link as="button" color={color} fontWeight="500" onClick={onClick}>
+    <Stack alignItems="center" spacing="10px" shouldWrapChildren isInline>
       {children}
-    </Link>
+    </Stack>
+  )
+}
+
+function Button({color, onClick, icon, ariaLabel, isDisabled, tooltipText}) {
+  return (
+    <Tooltip label={tooltipText}>
+      <IconButton
+        color={color}
+        aria-label={ariaLabel}
+        icon={icon}
+        variant="ghost"
+        onClick={onClick}
+        isDisabled={isDisabled}
+      />
+    </Tooltip>
   )
 }
 
@@ -70,7 +88,9 @@ function ViewHead({children, onClick, name, sortBy}) {
 function ViewContent({children, isHead, ...props}) {
   return (
     <Box flex="1" overflowX="auto" padding="2" whiteSpace="nowrap">
-      <Text>{children}</Text>
+      <OverlayScrollbar>
+        <Text>{children}</Text>
+      </OverlayScrollbar>
     </Box>
   )
 }
@@ -100,6 +120,7 @@ function LeftElement({children}) {
 
 export {
   Button,
+  ActionWrapper,
   ButtonGroup,
   Container,
   ViewContainer,

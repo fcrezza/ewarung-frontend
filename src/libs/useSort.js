@@ -1,10 +1,7 @@
 import {useState} from 'react'
 
-function useSort() {
-  const [sortBy, setSortBy] = useState({
-    name: '',
-    order: 'asc'
-  })
+function useSort(name = 'id', order = 'desc') {
+  const [sortBy, setSortBy] = useState({name, order})
 
   const sortItemBy = (name) => {
     if (sortBy.name === name && sortBy.order === 'asc') {

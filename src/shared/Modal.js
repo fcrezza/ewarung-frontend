@@ -1,24 +1,31 @@
 import React from 'react'
 import {
-  Modal,
+  Modal as ChakraModal,
+  ModalHeader as ChakraModalHeader,
+  ModalBody as ChakraModalBody,
+  ModalFooter as ChakraModalFooter,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalBody,
   ModalCloseButton
 } from '@chakra-ui/core'
 
-function ModalForm({isOpen, onClose, title, children}) {
+export function Modal({isOpen, onClose, title, children}) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <ChakraModal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
+        <ChakraModalHeader>{title}</ChakraModalHeader>
         <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
+        {children}
       </ModalContent>
-    </Modal>
+    </ChakraModal>
   )
 }
 
-export default ModalForm
+export function ModalBody({children}) {
+  return <ChakraModalBody>{children}</ChakraModalBody>
+}
+
+export function ModalFooter({children}) {
+  return <ChakraModalFooter>{children}</ChakraModalFooter>
+}
