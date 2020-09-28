@@ -1,5 +1,4 @@
 import React from 'react'
-
 import Dashboard from 'shared/Dashboard'
 
 function Histories() {

@@ -1,5 +1,7 @@
 import React from 'react'
 import useSWR, {mutate} from 'swr'
+import {pdf} from '@react-pdf/renderer'
+import printjs from 'print-js'
 import {
   Box,
   Flex,
@@ -13,6 +15,7 @@ import {
   NumberDecrementStepper
 } from '@chakra-ui/core'
 
+import PrintTransaction from 'components/Transaction/PrintTransaction'
 import AddItem from 'components/Transaction/AddItem'
 import ResetConfirmation from 'components/Transaction/ResetConfirmation'
 import SuccessModal from 'components/Transaction/SuccessModal'
@@ -26,9 +29,10 @@ import {useAuth} from 'libs/auth'
 
 function Transaction() {
   const {user} = useAuth()
-  const {isOpen, onOpen, onClose} = useDisclosure()
+  const [loading, setLoading] = React.useState(false)
   const [items, setItems] = React.useState([])
   const [cash, setCash] = React.useState(0)
+  const {isOpen, onOpen, onClose} = useDisclosure()
   const totalPrice = items.reduce((acc, curr) => (acc += curr.totalPrice), 0)
   const cashback = cash > totalPrice ? cash - totalPrice : 0
   const {data: transactionData} = useSWR(
@@ -88,25 +92,53 @@ function Transaction() {
     setItems(newData)
   }
 
-  const processTransaction = async () => {
-    await axios.post(
-      `/store/${user.store.id}/transaction`,
-      {
-        items,
-        cash,
-        totalPrice,
-        cashback,
-        invoice: transactionData.data.invoice
-      },
-      {
-        withCredentials: true
-      }
-    )
-    mutate(`/store/${user.store.id}/transaction`)
-    mutate(`/store/${user.store.id}/inventories`)
-    setItems([])
-    onOpen('success')
+  const processTransaction = () => {
+    setLoading(true)
+    axios
+      .post(
+        `/store/${user.store.id}/transaction`,
+        {
+          items,
+          cash,
+          totalPrice,
+          cashback,
+          invoice: transactionData.data.invoice
+        },
+        {
+          withCredentials: true
+        }
+      )
+      .then(() => {
+        setLoading(false)
+        onOpen('success')
+      })
   }
+
+  React.useEffect(() => {
+    const actionAfterSuccess = async () => {
+      const blob = await pdf(
+        <PrintTransaction
+          cash={cash}
+          cashback={cashback}
+          totalPrice={totalPrice}
+          owner={user.user.username}
+          store={user.store.name}
+          invoice={transactionData.data.invoice}
+          items={items}
+        />
+      ).toBlob()
+      const blobURL = URL.createObjectURL(blob)
+      printjs(blobURL)
+      mutate(`/store/${user.store.id}/transaction`)
+      mutate(`/store/${user.store.id}/inventories`)
+      clearItems()
+      setCash(0)
+    }
+
+    if (isOpen.type === 'success') {
+      actionAfterSuccess()
+    }
+  }, [isOpen.type])
 
   return (
     <Dashboard title="Transaksi">
@@ -252,10 +284,10 @@ function Transaction() {
                   Batal
                 </Button>
                 <Button
-                  isDisabled={!items.length || cash < totalPrice}
+                  isDisabled={!items.length || cash < totalPrice || loading}
                   onClick={processTransaction}
                 >
-                  Proses
+                  {!loading ? 'Proses' : 'Memproses...'}
                 </Button>
               </Stack>
             </Stack>

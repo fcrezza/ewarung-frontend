@@ -21,7 +21,7 @@ function AddItem(props) {
   const [typedValue, searchValue, setSearchValue] = useSearch(500)
   const {data: inventory} = useSWR(`/store/${idStore}/inventories`, (url) =>
     axios
-      .get(`${url}?q=${searchValue}&stockMin=1`, {
+      .get(`${url}?q=${searchValue}&minStock=1`, {
         withCredentials: true
       })
       .then(({data}) => data)
