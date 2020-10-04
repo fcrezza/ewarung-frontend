@@ -66,6 +66,8 @@ function ViewHead({children, onClick, name, sortBy}) {
       alignItems="center"
       justifyContent="space-between"
       backgroundColor={name === sortBy.name ? 'blue.900' : null}
+      whiteSpace="nowrap"
+      overflowX="auto"
       _hover={{
         backgroundColor: 'blue.900'
       }}
@@ -103,7 +105,7 @@ function ViewGroup({children, backgroundColor, ...props}) {
   )
 }
 
-function LeftElement({children}) {
+function LeftElement({children, ...props}) {
   return (
     <Flex
       alignSelf="stretch"
